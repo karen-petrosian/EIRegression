@@ -41,13 +41,17 @@ def execute(save_dir, n_buckets=3, i=None, bucketing_method="quantile", single_r
     X_test, y_test = test_data.drop(target, axis=1).values, test_data[target].values
 
     regressor_hp_grid = {
-        'regressor__learning_rate': [0.01, 0.05, 0.1],
-        'regressor__n_estimators': [50, 100, 150],
-        'regressor__max_depth': [3, 5, 7],
-        'regressor__colsample_bytree': [0.7, 0.8, 0.9],
-        'regressor__gamma': [0, 0.1, 0.2],
-        'regressor__reg_alpha': [0, 0.1, 0.5],
-        'regressor__reg_lambda': [0.5, 1, 1.5]
+        'regressor__learning_rate': {"type": "float", "low": 0.01, "high": 0.3, "step": 0.01},  # Finer granularity
+        'regressor__n_estimators': {"type": "int", "low": 50, "high": 500, "step": 50},  # Wider range for trees
+        'regressor__max_depth': {"type": "int", "low": 3, "high": 10, "step": 1},  # More depth options
+        'regressor__min_child_weight': {"type": "int", "low": 1, "high": 10, "step": 1},  # Regularization term
+        'regressor__subsample': {"type": "float", "low": 0.5, "high": 1.0, "step": 0.1},  # Controls sampling of rows
+        'regressor__colsample_bytree': {"type": "float", "low": 0.5, "high": 1.0, "step": 0.1},  # Column sampling
+        'regressor__gamma': {"type": "float", "low": 0, "high": 0.5, "step": 0.05},  # Minimum loss reduction
+        'regressor__reg_alpha': {"type": "float", "low": 0, "high": 1.0, "step": 0.1},  # L1 regularization
+        'regressor__reg_lambda': {"type": "float", "low": 0.1, "high": 2.0, "step": 0.1},  # L2 regularization
+        'regressor__scale_pos_weight': {"type": "float", "low": 1, "high": 10, "step": 1},  # Class imbalance handling
+        'regressor__max_delta_step': {"type": "float", "low": 0, "high": 10, "step": 1}
     }
 
     regressor_default_args = {
@@ -59,7 +63,7 @@ def execute(save_dir, n_buckets=3, i=None, bucketing_method="quantile", single_r
         "reg_alpha": 0.1,
         "reg_lambda": 1
     }
-    regressor_optimizer = ModelOptimizer()
+    regressor_optimizer = ModelOptimizer(n_trials=1000)
 
     # Creation of EI Regression with Random Forest
     eiReg = EmbeddedInterpreter(regressor=xgb.XGBRegressor,

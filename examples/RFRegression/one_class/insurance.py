@@ -27,11 +27,15 @@ def execute(save_dir, n_buckets=3, i=None, bucketing_method="quantile", single_r
 
 
     regressor_hp_grid = {
-        'regressor__n_estimators': [50, 100, 150],
-        'regressor__max_depth': [10, 20, 30],
-        'regressor__min_samples_split': [2, 5, 10],
-        'regressor__min_samples_leaf': [1, 2, 4],
-        'regressor__bootstrap': [True, False]
+        'regressor__n_estimators': {"type": "int", "low": 50, "high": 500, "step": 25},
+        'regressor__max_depth': {"type": "int", "low": 3, "high": 30, "step": 1},
+        'regressor__min_samples_split': {"type": "int", "low": 2, "high": 20, "step": 2},
+        'regressor__min_samples_leaf': {"type": "int", "low": 1, "high": 10, "step": 1},
+        'regressor__max_features': {"type": "float", "low": 0.1, "high": 1.0, "step": 0.1},
+        'regressor__bootstrap': {"type": "categorical", "choices": [True, False]},
+        'regressor__min_weight_fraction_leaf': {"type": "float", "low": 0.0, "high": 0.5, "step": 0.1},
+        'regressor__max_leaf_nodes': {"type": "int", "low": 10, "high": 1000, "step": 50},
+        'regressor__min_impurity_decrease': {"type": "float", "low": 0.0, "high": 0.1, "step": 0.01}
     }
 
     regressor_default_args = {
@@ -43,7 +47,7 @@ def execute(save_dir, n_buckets=3, i=None, bucketing_method="quantile", single_r
     }
 
 
-    regressor_optimizer = ModelOptimizer()
+    regressor_optimizer = ModelOptimizer(n_trials=1000)
 
     # Creation of EI Regression with Gradient Boosting
     eiReg = EmbeddedInterpreter(regressor=RandomForestRegressor,

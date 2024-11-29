@@ -42,7 +42,7 @@ def execute(save_dir, n_buckets=3, i=None, bucketing_method="quantile", single_r
         "reg_lambda": 1
     }
 
-    regressor_optimizer = ModelOptimizer()
+    regressor_optimizer = ModelOptimizer(n_trials=1000)
 
     # Creation of EI Regression with XGBoost
     eiReg = EmbeddedInterpreter(regressor=xgb.XGBRegressor,

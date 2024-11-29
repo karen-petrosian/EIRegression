@@ -67,6 +67,7 @@ from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 import numpy as np
 import pandas as pd
 from typing import Dict, Any, Optional, Union
+optuna.logging.set_verbosity(optuna.logging.DEBUG)
 
 
 class ModelOptimizer:

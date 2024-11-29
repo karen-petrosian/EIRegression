@@ -1,4 +1,6 @@
 import os
+import warnings
+# warnings.filterwarnings("ignore")
 
 from XGBRegression.one_class.movies import run_multiple_executions as xbg_movies_example_one
 from XGBRegression.one_class.housing import run_multiple_executions as xbg_housing_example_one
@@ -33,8 +35,8 @@ from RFRegression.three_class.bank32NH import run_multiple_executions as rf_bank
 from RFRegression.three_class.delta_elevators import run_multiple_executions as rf_delta_elevator_example_three
 
 def main():
-    num_buckets = 2
-    num_iterations = 1
+    num_buckets = 10
+    num_iterations = 5
     save_dir = "results"
 
     # Run all three examples one after the other
@@ -99,10 +101,10 @@ def main():
                             num_iterations=num_iterations,
                             save_dir=os.path.join(save_dir, "rf/one_class/house_16"))
 
-    print("random forest bank32NH (one class)")
-    rf_bank_32_example_one(num_buckets=num_buckets,
-                           num_iterations=num_iterations,
-                           save_dir=os.path.join(save_dir, "rf/one_class/bank32NH"))
+    # print("random forest bank32NH (one class)")
+    # rf_bank_32_example_one(num_buckets=num_buckets,
+    #                        num_iterations=num_iterations,
+    #                        save_dir=os.path.join(save_dir, "rf/one_class/bank32NH"))
 
     print("random forest delta elevators (one class)")
     rf_delta_elevator_example_one(num_buckets=num_buckets,

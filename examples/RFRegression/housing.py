@@ -41,7 +41,7 @@ def execute(save_dir, n_buckets=3, i=None, bucketing_method="quantile"):
         "bootstrap": True
     }
 
-    regressor_optimizer = ModelOptimizer()
+    regressor_optimizer = ModelOptimizer(n_trials=1000)
 
     # Creation of EI Regression with XGBoost
     eiReg = EmbeddedInterpreter(regressor=RandomForestRegressor,
